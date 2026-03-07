@@ -4,20 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Projects - Portfolio</title>
-    <meta name="description" content="Showcase of my recent projects">
+    <title>Projects — Iyyappan N</title>
+    <meta name="description"
+        content="Projects by Iyyappan N — AI Assistant, Stealth Chat P2P, OS Visualizer, Elemental Game, and E-Commerce Platform.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#00e5ff">
 </head>
 
 <body>
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+  </script>
+
 
     <header>
         <div class="container">
             <nav>
-                <div class="logo">MyPortfolio</div>
-                <label for="menu-checkbox" class="menu-toggle">&#9776;</label>
+                <div class="logo">Portfolio</div>
+                <label for="menu-checkbox" class="menu-toggle">☰</label>
                 <input type="checkbox" id="menu-checkbox">
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
@@ -32,54 +40,179 @@
 
     <section>
         <div class="container">
-            <h2>My Projects</h2>
+            <div class="section-heading reveal">
+                <h2>My Projects</h2>
+                <p>End-to-end software solutions built with real-world technologies.</p>
+            </div>
+
             <div class="projects-grid">
 
-                <!-- Project 1 -->
-                <article class="project-card">
-                    <img src="assets/images/project1.jpg" alt="Project 1"
-                        style="width:100%; height:200px; background:#ddd; object-fit:cover;">
-                    <div class="project-content">
-                        <h3>Portfolio Website</h3>
-                        <p>A responsive personal portfolio website built using HTML5 and CSS3. Features a clean design
-                            and PWA capabilities.</p>
-                        <div class="project-tags">
-                            <span class="tag">HTML5</span>
-                            <span class="tag">CSS3</span>
-                            <span class="tag">Responsive</span>
-                        </div>
+                <!-- Project 1: Iyyappan AI Assistant -->
+                <article class="project-card reveal">
+                    <div class="project-top">
+                        <span class="project-number">01 / 05</span>
+                        <div class="project-icon" style="background:rgba(var(--rgb-cyan),0.12);">🤖</div>
+                    </div>
+                    <div class="project-body">
+                        <h3>Iyyappan AI Assistant</h3>
+                        <p>
+                            A secure AI chatbot with SHA-256 authentication, LangChain conversation memory, and Groq
+                            LLaMA model switching (8B / 70B / 90B) with adjustable temperature controls. Features
+                            persistent 7-day chat history, multi-session management, and file upload support (PDF, DOCX,
+                            images).
+                        </p>
+                    </div>
+                    <div class="project-footer">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">LangChain</span>
+                        <span class="tech-tag purple-tag">Groq LLMs</span>
+                        <a href="https://github.com/Iyyappan-15" target="_blank" class="github-btn"
+                            title="View on GitHub">
+                            <svg fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            GitHub
+                        </a>
                     </div>
                 </article>
 
-                <!-- Project 2 -->
-                <article class="project-card">
-                    <img src="assets/images/project2.jpg" alt="Project 2"
-                        style="width:100%; height:200px; background:#ddd; object-fit:cover;">
-                    <div class="project-content">
-                        <h3>E-commerce Page</h3>
-                        <p>A product landing page design with modern UI elements, hover effects, and a responsive grid
-                            layout.</p>
-                        <div class="project-tags">
-                            <span class="tag">HTML5</span>
-                            <span class="tag">CSS Grid</span>
-                            <span class="tag">Flexbox</span>
-                        </div>
+                <!-- Project 2: Stealth Chat -->
+                <article class="project-card reveal" style="transition-delay:0.1s">
+                    <div class="project-top">
+                        <span class="project-number">02 / 05</span>
+                        <div class="project-icon" style="background:rgba(var(--rgb-purple),0.12);">🔐</div>
+                    </div>
+                    <div class="project-body">
+                        <h3>Stealth Chat — Serverless P2P Messaging</h3>
+                        <p>
+                            Browser-based P2P app with end-to-end encryption (AES-GCM + ECDH key exchange) via WebRTC
+                            DataChannels — messages never touch the server. Includes screenshot detection,
+                            auto-destructing messages (5s–1min timers), session lock, and a Node.js WebSocket signaling
+                            server for peer handshake.
+                        </p>
+                    </div>
+                    <div class="project-footer">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag purple-tag">WebRTC</span>
+                        <span class="tech-tag purple-tag">Web Crypto API</span>
+                        <a href="https://github.com/Iyyappan-15" target="_blank" class="github-btn"
+                            title="View on GitHub">
+                            <svg fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            GitHub
+                        </a>
                     </div>
                 </article>
 
-                <!-- Project 3 -->
-                <article class="project-card">
-                    <img src="assets/images/project3.jpg" alt="Project 3"
-                        style="width:100%; height:200px; background:#ddd; object-fit:cover;">
-                    <div class="project-content">
-                        <h3>Task Tracker UI</h3>
-                        <p>A clean and intuitive user interface for a task management application.</p>
-                        <div class="project-tags">
-                            <span class="tag">UI/UX</span>
-                            <span class="tag">CSS Variables</span>
-                        </div>
+                <!-- Project 3: Multiplayer Game -->
+                <article class="project-card reveal" style="transition-delay:0.2s">
+                    <div class="project-top">
+                        <span class="project-number">03 / 05</span>
+                        <div class="project-icon" style="background:rgba(var(--rgb-green),0.12);">🎮</div>
+                    </div>
+                    <div class="project-body">
+                        <h3>Multiplayer Elemental Web Game</h3>
+                        <p>
+                            Fully interactive browser-based multiplayer game with dynamic game logic, win/loss
+                            conditions, and real-time UI updates. Built with modular JavaScript components ensuring
+                            clean separation of game state, rendering, and event handling for maintainability.
+                        </p>
+                    </div>
+                    <div class="project-footer">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <a href="https://github.com/Iyyappan-15" target="_blank" class="github-btn"
+                            title="View on GitHub">
+                            <svg fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            GitHub
+                        </a>
                     </div>
                 </article>
+
+                <!-- Project 4: OS CPU Scheduling Visualizer -->
+                <article class="project-card reveal">
+                    <div class="project-top">
+                        <span class="project-number">04 / 05</span>
+                        <div class="project-icon" style="background:rgba(var(--rgb-orange),0.12);">⚙️</div>
+                    </div>
+                    <div class="project-body">
+                        <h3>OS CPU Scheduling Visualizer</h3>
+                        <p>
+                            Interactive visualizer simulating FCFS, SJF, Round Robin, and Priority Scheduling algorithms
+                            with real-time process execution timelines. Displays OS metrics (waiting time, turnaround
+                            time, CPU utilization) with user-configurable process parameters for dynamic algorithm
+                            observation.
+                        </p>
+                    </div>
+                    <div class="project-footer">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <a href="https://github.com/Iyyappan-15" target="_blank" class="github-btn"
+                            title="View on GitHub">
+                            <svg fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Project 5: E-Commerce Platform -->
+                <article class="project-card reveal" style="transition-delay:0.1s">
+                    <div class="project-top">
+                        <span class="project-number">05 / 05</span>
+                        <div class="project-icon" style="background:rgba(var(--rgb-pink),0.12);">🛒</div>
+                    </div>
+                    <div class="project-body">
+                        <h3>E-Commerce Web Platform</h3>
+                        <p>
+                            Scalable e-commerce platform with product catalogue, search functionality, shopping cart,
+                            and checkout workflow. Built using modular architecture patterns with HTML, CSS, JavaScript,
+                            and SQL for data management.
+                        </p>
+                    </div>
+                    <div class="project-footer">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag purple-tag">SQL</span>
+                        <a href="https://github.com/Iyyappan-15" target="_blank" class="github-btn"
+                            title="View on GitHub">
+                            <svg fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
+                </article>
+
+                <!-- GitHub CTA -->
+                <div class="project-card reveal"
+                    style="transition-delay:0.2s;align-items:center;justify-content:center;padding:40px;text-align:center;border-style:dashed;">
+                    <div style="font-size:2.5rem;margin-bottom:16px;">👨‍💻</div>
+                    <h3 style="color:var(--clr-heading);margin-bottom:10px;">More on GitHub</h3>
+                    <p style="font-size:0.9rem;margin-bottom:20px;">Explore all repositories and side projects on my
+                        GitHub profile.</p>
+                    <a href="https://github.com/Iyyappan-15" target="_blank" class="btn btn-outline">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                        </svg>
+                        github.com/Iyyappan-15
+                    </a>
+                </div>
 
             </div>
         </div>
@@ -87,11 +220,41 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Iyyappan. All rights reserved.</p>
+            <div class="footer-inner">
+                <div class="footer-logo">Portfolio</div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="skills.html">Skills</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <p class="footer-copy" style="margin-top:24px;">© 2025 Iyyappan N. All rights reserved.</p>
         </div>
     </footer>
 
-</body>
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        reveals.forEach(r => obs.observe(r));
+    </script>
 
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    if (document.body.classList.contains('dark-theme')) {
+      localStorage.setItem('theme', 'dark');
+      if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(true);
+    } else {
+      localStorage.setItem('theme', 'light');
+      if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(false);
+    }
+  });
+</script>
+</body>
 
 </html>

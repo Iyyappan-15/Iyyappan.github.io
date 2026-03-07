@@ -4,20 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Skills - Portfolio</title>
-    <meta name="description" content="My technical and soft skills">
+    <title>Skills — Iyyappan N</title>
+    <meta name="description"
+        content="Technical skills of Iyyappan N — Java, Python, JavaScript, LangChain, WebRTC, SQL, and more.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#00e5ff">
 </head>
 
 <body>
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+  </script>
+
 
     <header>
         <div class="container">
             <nav>
-                <div class="logo">MyPortfolio</div>
-                <label for="menu-checkbox" class="menu-toggle">&#9776;</label>
+                <div class="logo">Portfolio</div>
+                <label for="menu-checkbox" class="menu-toggle">☰</label>
                 <input type="checkbox" id="menu-checkbox">
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
@@ -32,89 +40,220 @@
 
     <section>
         <div class="container">
-            <h2>My Skills</h2>
-            <div class="skills-grid">
+            <div class="section-heading reveal">
+                <h2>My Skills</h2>
+                <p>Technologies and tools I work with to build real-world applications.</p>
+            </div>
 
-                <!-- Technical Skills -->
-                <div class="skill-category">
-                    <h3>Technical Skills</h3>
-                    <div class="skill-item">
-                        <span class="skill-name">HTML5</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 95%;"></div>
+            <div class="skills-categories">
+
+                <!-- Languages -->
+                <div class="skill-group reveal">
+                    <div class="skill-group-title">
+                        <div class="icon-wrap cyan-bg">💻</div>
+                        Programming Languages
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">Java</span><span
+                                class="skill-bar-pct">85%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill" data-width="85"></div>
                         </div>
                     </div>
-                    <div class="skill-item">
-                        <span class="skill-name">CSS3</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 90%;"></div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">Python</span><span
+                                class="skill-bar-pct">80%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill" data-width="80"></div>
                         </div>
                     </div>
-                    <div class="skill-item">
-                        <span class="skill-name">JavaScript (Basic)</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 75%;"></div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">JavaScript (ES6+)</span><span
+                                class="skill-bar-pct">80%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill" data-width="80"></div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Web -->
+                <div class="skill-group reveal" style="transition-delay:0.1s">
+                    <div class="skill-group-title">
+                        <div class="icon-wrap purple-bg">🌐</div>
+                        Web Development
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">HTML5</span><span
+                                class="skill-bar-pct">95%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill" data-width="95"></div>
+                        </div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">CSS3</span><span
+                                class="skill-bar-pct">90%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill" data-width="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">Streamlit</span><span
+                                class="skill-bar-pct">75%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill purple" data-width="75"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI / ML -->
+                <div class="skill-group reveal" style="transition-delay:0.2s">
+                    <div class="skill-group-title">
+                        <div class="icon-wrap pink-bg">🤖</div>
+                        AI / Emerging Tech
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">LangChain</span><span
+                                class="skill-bar-pct">75%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill purple" data-width="75"></div>
+                        </div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">WebRTC / P2P</span><span
+                                class="skill-bar-pct">70%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill purple" data-width="70"></div>
+                        </div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-name">Web Crypto API</span><span
+                                class="skill-bar-pct">72%</span></div>
+                        <div class="bar-track">
+                            <div class="bar-fill purple" data-width="72"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Databases -->
+                <div class="skill-group reveal" style="transition-delay:0.1s">
+                    <div class="skill-group-title">
+                        <div class="icon-wrap green-bg">🗄️</div>
+                        Databases
+                    </div>
+                    <div class="skill-pills">
+                        <span class="pill">SQL</span>
+                        <span class="pill">MongoDB</span>
+                        <span class="pill">JSON Storage</span>
                     </div>
                 </div>
 
                 <!-- Tools -->
-                <div class="skill-category">
-                    <h3>Tools</h3>
-                    <div class="skill-item">
-                        <span class="skill-name">VS Code</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 95%;"></div>
-                        </div>
+                <div class="skill-group reveal" style="transition-delay:0.2s">
+                    <div class="skill-group-title">
+                        <div class="icon-wrap orange-bg">🛠️</div>
+                        Tools & DevOps
                     </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Git & GitHub</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 80%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Java</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 70%;"></div>
-                        </div>
+                    <div class="skill-pills">
+                        <span class="pill">Git</span>
+                        <span class="pill">GitHub</span>
+                        <span class="pill">VS Code</span>
+                        <span class="pill">npm</span>
+                        <span class="pill">Node.js</span>
                     </div>
                 </div>
 
-                <!-- Soft Skills -->
-                <div class="skill-category">
-                    <h3>Soft Skills</h3>
-                    <div class="skill-item">
-                        <span class="skill-name">Communication</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 90%;"></div>
-                        </div>
+                <!-- Concepts -->
+                <div class="skill-group reveal" style="transition-delay:0.3s">
+                    <div class="skill-group-title">
+                        <div class="icon-wrap sky-bg">🧠</div>
+                        CS Concepts
                     </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Teamwork</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 95%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Problem Solving</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 85%;"></div>
-                        </div>
+                    <div class="skill-pills">
+                        <span class="pill">OOP</span>
+                        <span class="pill">Data Structures</span>
+                        <span class="pill">OS Fundamentals</span>
+                        <span class="pill">E2E Encryption</span>
+                        <span class="pill">P2P Networking</span>
+                        <span class="pill">Clean Architecture</span>
                     </div>
                 </div>
 
             </div>
+
+            <!-- Soft Skills -->
+            <div style="margin-top:56px;" class="reveal">
+                <div class="section-heading" style="margin-bottom:32px;">
+                    <h2>Professional Skills</h2>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;">
+                    <div class="about-stat-card" style="min-width:160px;">
+                        <div style="font-size:2rem;">🧩</div>
+                        <div style="font-weight:600;color:var(--clr-heading);margin-top:8px;">Logical Thinking</div>
+                    </div>
+                    <div class="about-stat-card" style="min-width:160px;">
+                        <div style="font-size:2rem;">🤝</div>
+                        <div style="font-weight:600;color:var(--clr-heading);margin-top:8px;">Team Collaboration</div>
+                    </div>
+                    <div class="about-stat-card" style="min-width:160px;">
+                        <div style="font-size:2rem;">⏱️</div>
+                        <div style="font-weight:600;color:var(--clr-heading);margin-top:8px;">Time Management</div>
+                    </div>
+                    <div class="about-stat-card" style="min-width:160px;">
+                        <div style="font-size:2rem;">🔄</div>
+                        <div style="font-weight:600;color:var(--clr-heading);margin-top:8px;">Adaptability</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Iyyappan. All rights reserved.</p>
+            <div class="footer-inner">
+                <div class="footer-logo">Portfolio</div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <p class="footer-copy" style="margin-top:24px;">© 2025 Iyyappan N. All rights reserved.</p>
         </div>
     </footer>
 
-</body>
+    <script>
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    // Animate bars inside this group
+                    e.target.querySelectorAll('.bar-fill').forEach(bar => {
+                        bar.style.width = bar.dataset.width + '%';
+                    });
+                }
+            });
+        }, { threshold: 0.12 });
+        reveals.forEach(r => obs.observe(r));
+    </script>
 
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    if (document.body.classList.contains('dark-theme')) {
+      localStorage.setItem('theme', 'dark');
+      if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(true);
+    } else {
+      localStorage.setItem('theme', 'light');
+      if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(false);
+    }
+  });
+</script>
+</body>
 
 </html>
