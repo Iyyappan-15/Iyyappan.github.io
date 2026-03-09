@@ -971,7 +971,8 @@ nav {
 }
 
 .contact-info-card a:hover {
-  color: #fff;
+  color: var(--clr-purple);
+  text-decoration: underline;
 }
 
 .social-row {

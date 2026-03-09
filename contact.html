@@ -10,16 +10,255 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00e5ff">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+        /* ── Send-button states ─────────────────────────────────── */
+        .submit-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .submit-btn .btn-label,
+        .submit-btn .btn-sending,
+        .submit-btn .btn-sent {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .submit-btn .btn-sending,
+        .submit-btn .btn-sent {
+            position: absolute;
+            inset: 0;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .submit-btn.sending .btn-label {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .submit-btn.sending .btn-sending {
+            opacity: 1;
+        }
+
+        .submit-btn.sent .btn-label {
+            opacity: 0;
+        }
+
+        .submit-btn.sent .btn-sending {
+            opacity: 0;
+        }
+
+        .submit-btn.sent .btn-sent {
+            opacity: 1;
+        }
+
+        /* ── Spinner ──────────────────────────────────────────────── */
+        .spin-icon {
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Paper-plane fly-out ─────────────────────────────────── */
+        .plane-wrapper {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            overflow: hidden;
+        }
+
+        @keyframes planefly {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+
+            70% {
+                transform: translate(60px, -60px) rotate(45deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(80px, -80px) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .submit-btn.sending .plane-icon {
+            animation: planefly 1s ease forwards;
+        }
+
+        /* ── Confetti burst ──────────────────────────────────────── */
+        .confetti-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            opacity: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-80px) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ── Success message ─────────────────────────────────────── */
+        #form-success {
+            display: none;
+            margin-top: 20px;
+            padding: 18px 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.12), rgba(52, 211, 153, 0.08));
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            color: #34d399;
+            text-align: center;
+            font-weight: 500;
+            animation: fadeUpIn 0.5s ease both;
+        }
+
+        @keyframes fadeUpIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Error message ───────────────────────────────────────── */
+        #form-error {
+            display: none;
+            margin-top: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            text-align: center;
+            font-size: 0.9rem;
+            animation: fadeUpIn 0.5s ease both;
+        }
+
+        /* ── Icon boxes – colourful gradient rings ───────────────── */
+        .contact-icon-box {
+            position: relative;
+        }
+
+        .contact-icon-box svg {
+            display: block;
+        }
+
+        /* Social buttons upgrade */
+        .social-btn {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-4px) scale(1.08);
+        }
+
+        .social-btn.github-social:hover {
+            border-color: #6e5494;
+            color: #c084fc;
+            background: rgba(110, 84, 148, 0.15);
+            box-shadow: 0 6px 20px rgba(110, 84, 148, 0.3);
+        }
+
+        .social-btn.linkedin-social:hover {
+            border-color: #0a66c2;
+            color: #60a5fa;
+            background: rgba(10, 102, 194, 0.15);
+            box-shadow: 0 6px 20px rgba(10, 102, 194, 0.3);
+        }
+
+        .social-btn.email-social:hover {
+            border-color: rgba(0, 229, 255, 0.7);
+            color: var(--clr-cyan);
+            background: rgba(0, 229, 255, 0.12);
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.25);
+        }
+
+        /* Pulse on contact-info-card */
+        .contact-info-card {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .contact-info-card:hover {
+            transform: translateX(6px) !important;
+        }
+
+        /* Gradient border on form card */
+        .contact-form-card {
+            position: relative;
+        }
+
+        .contact-form-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: calc(var(--radius-card) + 1px);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.3), rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.2));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .contact-form-card:focus-within::before {
+            opacity: 1;
+        }
+
+        /* Section heading glow mark */
+        .section-heading h2 {
+            text-shadow: 0 0 40px rgba(0, 229, 255, 0.15);
+        }
+    </style>
 </head>
 
 <body>
-  <script>
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark-theme');
-    }
-  </script>
+    <script>
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
 
+    <!-- Confetti overlay -->
+    <div class="confetti-overlay" id="confetti-overlay"></div>
 
     <header>
         <div class="container">
@@ -34,6 +273,24 @@
                     <li><a href="projects.html">Projects</a></li>
                     <li><a href="contact.html" class="active">Contact</a></li>
                 </ul>
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
             </nav>
         </div>
     </header>
@@ -47,80 +304,120 @@
 
             <div class="contact-grid">
 
-                <!-- Left: Info Cards -->
+                <!-- ── Left: Info Cards ─────────────────────────────── -->
                 <div class="contact-info-cards reveal">
 
+                    <!-- Email -->
                     <div class="contact-info-card">
-                        <div class="contact-icon-box" style="background:rgba(var(--rgb-cyan),0.12);">📧</div>
+                        <div class="contact-icon-box"
+                            style="background:linear-gradient(135deg,rgba(0,229,255,0.2),rgba(2,132,199,0.1));border:1px solid rgba(0,229,255,0.25);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                style="color:var(--clr-cyan)">
+                                <rect x="2" y="4" width="20" height="16" rx="2" />
+                                <path d="M2 7l10 7 10-7" />
+                            </svg>
+                        </div>
                         <div>
                             <h4>Email</h4>
                             <p><a href="mailto:iyyappan200509@gmail.com">iyyappan200509@gmail.com</a></p>
                         </div>
                     </div>
 
+                    <!-- Phone -->
                     <div class="contact-info-card">
-                        <div class="contact-icon-box" style="background:rgba(var(--rgb-green),0.12);">📞</div>
+                        <div class="contact-icon-box"
+                            style="background:linear-gradient(135deg,rgba(52,211,153,0.2),rgba(22,163,74,0.1));border:1px solid rgba(52,211,153,0.25);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#34d399">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.63a16 16 0 0 0 6 6l1.27-.89a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                        </div>
                         <div>
                             <h4>Phone</h4>
                             <p><a href="tel:+919443023482">+91 9443023482</a></p>
                         </div>
                     </div>
 
+                    <!-- Location -->
                     <div class="contact-info-card">
-                        <div class="contact-icon-box" style="background:rgba(var(--rgb-orange),0.12);">📍</div>
+                        <div class="contact-icon-box"
+                            style="background:linear-gradient(135deg,rgba(251,146,60,0.2),rgba(234,88,12,0.1));border:1px solid rgba(251,146,60,0.25);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#fb923c">
+                                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
                         <div>
                             <h4>Location</h4>
                             <p>Puducherry, India</p>
                         </div>
                     </div>
 
+                    <!-- Social links -->
                     <div class="contact-info-card" style="flex-direction:column;align-items:flex-start;">
                         <h4
-                            style="margin-bottom:12px;font-size:0.8rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--clr-muted);">
-                            Connect Online</h4>
+                            style="margin-bottom:16px;font-size:0.8rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--clr-muted);">
+                            Connect Online
+                        </h4>
                         <div class="social-row">
-                            <a href="https://github.com/Iyyappan-15" target="_blank" class="social-btn" title="GitHub">
-                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+
+                            <!-- GitHub -->
+                            <a href="https://github.com/Iyyappan-15" target="_blank" class="social-btn github-social"
+                                title="GitHub">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                     <path
-                                        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
                                 </svg>
                             </a>
-                            <a href="https://linkedin.com/in/iyyappan15" target="_blank" class="social-btn"
-                                title="LinkedIn">
-                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+
+                            <!-- LinkedIn -->
+                            <a href="https://linkedin.com/in/iyyappan15" target="_blank"
+                                class="social-btn linkedin-social" title="LinkedIn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                     <path
-                                        d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z" />
+                                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                 </svg>
                             </a>
-                            <a href="mailto:iyyappan200509@gmail.com" class="social-btn" title="Email">
-                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                                    <path
-                                        d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
+
+                            <!-- Email -->
+                            <a href="mailto:iyyappan200509@gmail.com" class="social-btn email-social" title="Email">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="M2 7l10 7 10-7" />
                                 </svg>
                             </a>
+
                         </div>
                     </div>
 
                     <!-- Download Resume -->
                     <a href="Iyyappan_N_Final_Resume.docx" download class="btn btn-primary"
                         style="text-align:center;justify-content:center;margin-top:8px;">
-                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path
-                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                            <path
-                                d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
                         </svg>
                         Download Resume
                     </a>
 
                 </div>
 
-                <!-- Right: Form -->
+                <!-- ── Right: Contact Form ───────────────────────────── -->
                 <div class="contact-form-card reveal" style="transition-delay:0.15s">
-                    <h3 style="color:var(--clr-heading);margin-bottom:8px;">Send Me a Message</h3>
-                    <p style="margin-bottom:24px;font-size:0.9rem;">I typically respond within 24 hours.</p>
+                    <h3 style="color:var(--clr-heading);margin-bottom:6px;font-size:1.4rem;">
+                        Send Me a Message
+                    </h3>
+                    <p style="margin-bottom:28px;font-size:0.92rem;">
+                        I typically respond within 24 hours.
+                    </p>
 
-                    <form id="contact-form" onsubmit="handleSubmit(event)">
+                    <form id="contact-form" novalidate>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
                             <div class="form-group">
                                 <label for="fname">First Name</label>
@@ -145,17 +442,50 @@
                             <textarea id="message" name="message" rows="5" required
                                 placeholder="Tell me about the opportunity or project..."></textarea>
                         </div>
+
                         <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
-                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path
-                                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
-                            </svg>
-                            Send Message
+
+                            <!-- Default label -->
+                            <span class="btn-label">
+                                <!-- Paper plane icon -->
+                                <svg class="plane-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13" />
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                </svg>
+                                Send Message
+                            </span>
+
+                            <!-- Sending state -->
+                            <span class="btn-sending">
+                                <span class="spin-icon"></span>
+                                Sending…
+                            </span>
+
+                            <!-- Sent state -->
+                            <span class="btn-sent">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                                Message Sent!
+                            </span>
+
                         </button>
-                        <div id="form-success"
-                            style="display:none;margin-top:16px;padding:14px;border-radius:10px;background:rgba(var(--rgb-green),0.1);border:1px solid rgba(var(--rgb-green),0.3);color:#34d399;text-align:center;">
-                            ✅ Thanks! I'll get back to you soon.
+
+                        <!-- Success / Error feedback -->
+                        <div id="form-success">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                style="margin-right:8px;vertical-align:middle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            Thanks! Your message has been sent. I'll get back to you soon.
                         </div>
+                        <div id="form-error"></div>
+
                     </form>
                 </div>
 
@@ -179,41 +509,133 @@
     </footer>
 
     <script>
-        // Scroll reveal
+        /* ── Scroll reveal ──────────────────────────────────────── */
         const reveals = document.querySelectorAll('.reveal');
         const obs = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.1 });
         reveals.forEach(r => obs.observe(r));
 
-        // Form submit (demo — shows success message)
-        function handleSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            btn.disabled = true;
-            btn.innerHTML = '⏳ Sending...';
-            setTimeout(() => {
-                document.getElementById('contact-form').style.opacity = '0.4';
-                document.getElementById('form-success').style.display = 'block';
-                btn.innerHTML = '✅ Sent!';
-            }, 1200);
+        /* ── EmailJS init ────────────────────────────────────────
+           Replace the placeholders below with your actual EmailJS
+           Public Key, Service ID and Template ID after signing up
+           at https://www.emailjs.com (free plan supports 200/mo).
+        ─────────────────────────────────────────────────────────── */
+        (function () {
+            emailjs.init({
+                publicKey: "nBfa7cwAkaBSRD436",   // ← paste your Public Key here
+            });
+        })();
+
+        const SERVICE_ID = "service_8cv0ku6";          // ← e.g. "service_abc123"
+        const TEMPLATE_ID = "template_ldneovn";         // ← e.g. "template_xyz789"
+
+        /* ── Confetti burst ─────────────────────────────────────── */
+        function launchConfetti() {
+            const overlay = document.getElementById('confetti-overlay');
+            const colors = ['#00e5ff', '#8b5cf6', '#ec4899', '#34d399', '#fbbf24', '#f87171'];
+            const COUNT = 80;
+
+            for (let i = 0; i < COUNT; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.cssText = `
+                    left: ${Math.random() * 100}vw;
+                    top: ${-20 - Math.random() * 60}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    width: ${6 + Math.random() * 8}px;
+                    height: ${6 + Math.random() * 8}px;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                    animation: confettiFall ${1.5 + Math.random() * 2}s ${Math.random() * 0.8}s ease-out forwards;
+                `;
+                overlay.appendChild(piece);
+            }
+
+            // Clean up after animation
+            setTimeout(() => { overlay.innerHTML = ''; }, 4000);
         }
+
+        /* ── Form submit ────────────────────────────────────────── */
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submit-btn');
+            const successBox = document.getElementById('form-success');
+            const errorBox = document.getElementById('form-error');
+
+            // Hide old feedback
+            successBox.style.display = 'none';
+            errorBox.style.display = 'none';
+
+            // Client-side validation
+            const fname = document.getElementById('fname').value.trim();
+            const lname = document.getElementById('lname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!fname || !lname || !email || !message) {
+                errorBox.textContent = '⚠️ Please fill in all required fields.';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            // Start sending animation
+            btn.classList.add('sending');
+            btn.disabled = true;
+
+            // Build the template parameters
+            // These names must match the variables in your EmailJS template
+            const templateParams = {
+                from_name: `${fname} ${lname}`,
+                from_email: email,
+                subject: document.getElementById('subject').value.trim() || 'Portfolio Contact',
+                message: message,
+                to_email: 'iyyappan200509@gmail.com',
+            };
+
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                .then(() => {
+                    // Success state
+                    btn.classList.remove('sending');
+                    btn.classList.add('sent');
+
+                    successBox.style.display = 'block';
+                    launchConfetti();
+
+                    // Reset form fields
+                    document.getElementById('contact-form').reset();
+
+                    // After 5 s, allow re-sending
+                    setTimeout(() => {
+                        btn.classList.remove('sent');
+                        btn.disabled = false;
+                    }, 5000);
+                })
+                .catch((err) => {
+                    btn.classList.remove('sending');
+                    btn.disabled = false;
+
+                    errorBox.innerHTML = `❌ Failed to send — ${err.text || err.message || 'please try again or email me directly at <a href="mailto:iyyappan200509@gmail.com">iyyappan200509@gmail.com</a>'}.`;
+                    errorBox.style.display = 'block';
+                });
+        });
     </script>
 
-
-<script>
-  const themeToggle = document.getElementById('theme-toggle');
-  themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-theme');
-    if (document.body.classList.contains('dark-theme')) {
-      localStorage.setItem('theme', 'dark');
-      if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(true);
-    } else {
-      localStorage.setItem('theme', 'light');
-      if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(false);
-    }
-  });
-</script>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                if (document.body.classList.contains('dark-theme')) {
+                    localStorage.setItem('theme', 'dark');
+                    if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(true);
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    if (typeof window.updateParticlesTheme === 'function') window.updateParticlesTheme(false);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
