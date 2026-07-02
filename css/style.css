@@ -656,12 +656,13 @@ nav {
 }
 
 .chip {
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  color: #c4b5fd;
+  background: var(--tag-purple-bg);
+  border: 1px solid var(--tag-purple-border);
+  color: var(--tag-purple-text);
   padding: 6px 14px;
   border-radius: 50px;
   font-size: 0.82rem;
+  font-weight: 500;
 }
 
 /* ============================================================
