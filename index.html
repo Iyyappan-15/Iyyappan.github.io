@@ -142,9 +142,9 @@
       font-size: 0.72rem;
       padding: 3px 10px;
       border-radius: 50px;
-      background: rgba(139, 92, 246, 0.08);
-      border: 1px solid rgba(139, 92, 246, 0.25);
-      color: var(--clr-text);
+      background: var(--tag-purple-bg);
+      border: 1px solid var(--tag-purple-border);
+      color: var(--tag-purple-text);
     }
 
     .feat-icon-big {
@@ -156,16 +156,19 @@
     .feat-visit {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      margin-top: 14px;
-      color: var(--clr-muted);
-      font-size: 0.8rem;
+      gap: 6px;
+      margin-top: 16px;
+      color: var(--clr-text);
+      font-size: 0.82rem;
       font-weight: 600;
       text-decoration: none;
       transition: var(--transition);
+      border-top: 1px solid var(--clr-border);
+      padding-top: 12px;
+      width: 100%;
     }
     .feat-visit:hover { color: var(--clr-cyan); }
-    .feat-visit svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .feat-visit svg { width: 14px; height: 14px; flex-shrink: 0; }
 
     /* Quick Skills Bar */
     .skills-bar-wrap {
