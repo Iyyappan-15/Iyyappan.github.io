@@ -18,8 +18,8 @@
   --clr-pink: #db2777;
   --clr-grad: linear-gradient(135deg, #0284c7 0%, #7c3aed 100%);
   --clr-grad2: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
-  --clr-text: #334155;
-  --clr-muted: #64748b;
+  --clr-text: #1e293b;
+  --clr-muted: #475569;
   --clr-heading: #0f172a;
   --shadow-glow: 0 0 30px rgba(2, 132, 199, 0.15);
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
@@ -40,6 +40,14 @@
   --clr-footer-bg: rgba(248, 250, 252, 0.95);
   --clr-mobile-menu: rgba(255, 255, 255, 0.97);
   --clr-btn-text: #ffffff;
+
+  /* Tag colors — light mode */
+  --tag-cyan-bg: rgba(2, 132, 199, 0.1);
+  --tag-cyan-border: rgba(2, 132, 199, 0.35);
+  --tag-cyan-text: #0369a1;
+  --tag-purple-bg: rgba(124, 58, 237, 0.1);
+  --tag-purple-border: rgba(124, 58, 237, 0.3);
+  --tag-purple-text: #6d28d9;
 }
 
 body.dark-theme,
@@ -70,6 +78,14 @@ body.dark-theme,
   --clr-footer-bg: rgba(8, 11, 20, 0.95);
   --clr-mobile-menu: rgba(8, 11, 20, 0.97);
   --clr-btn-text: #000000;
+
+  /* Tag colors — dark mode */
+  --tag-cyan-bg: rgba(0, 229, 255, 0.08);
+  --tag-cyan-border: rgba(0, 229, 255, 0.2);
+  --tag-cyan-text: #00e5ff;
+  --tag-purple-bg: rgba(139, 92, 246, 0.08);
+  --tag-purple-border: rgba(139, 92, 246, 0.2);
+  --tag-purple-text: #c4b5fd;
 }
 
 
@@ -858,7 +874,7 @@ nav {
 .project-body p {
   font-size: 0.9rem;
   line-height: 1.65;
-  color: var(--clr-muted);
+  color: var(--clr-text);
   margin-bottom: 0;
 }
 
@@ -878,16 +894,16 @@ nav {
   padding: 4px 12px;
   border-radius: 50px;
   font-size: 0.75rem;
-  font-weight: 500;
-  background: rgba(0, 229, 255, 0.08);
-  border: 1px solid rgba(0, 229, 255, 0.2);
-  color: var(--clr-cyan);
+  font-weight: 600;
+  background: var(--tag-cyan-bg);
+  border: 1px solid var(--tag-cyan-border);
+  color: var(--tag-cyan-text);
 }
 
 .tech-tag.purple-tag {
-  background: rgba(139, 92, 246, 0.08);
-  border-color: rgba(139, 92, 246, 0.2);
-  color: #c4b5fd;
+  background: var(--tag-purple-bg);
+  border-color: var(--tag-purple-border);
+  color: var(--tag-purple-text);
 }
 
 .github-btn {
