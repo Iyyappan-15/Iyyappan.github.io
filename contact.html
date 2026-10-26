@@ -14,11 +14,56 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <style>
-        /* ── Send-button states ─────────────────────────────────── */
+        /* ── Instagram Reel Style Send Button Micro-interaction ───────── */
+        .submit-btn-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 14px;
+            position: relative;
+        }
+
         .submit-btn {
             position: relative;
-            overflow: hidden;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 290px;
+            height: 54px;
+            padding: 0 28px;
+            border: none;
+            outline: none;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #007cf0 0%, #7928ca 50%, #ff0080 100%);
+            background-size: 200% 200%;
+            color: #ffffff !important;
+            font-family: inherit;
+            font-size: 1.02rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(121, 40, 202, 0.45), 0 4px 12px rgba(0, 124, 240, 0.25);
+            transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                        max-width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-radius 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.4s ease,
+                        box-shadow 0.4s ease,
+                        transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            overflow: visible;
+        }
+
+        .submit-btn:hover:not(.loading):not(.success):not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 30px -5px rgba(121, 40, 202, 0.55), 0 6px 16px rgba(0, 124, 240, 0.35);
+        }
+
+        .submit-btn:active:not(.loading):not(.success) {
+            transform: scale(0.97);
         }
 
         .submit-btn .btn-label,
@@ -26,86 +71,144 @@
         .submit-btn .btn-sent {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: absolute;
+            inset: 0;
+            transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .submit-btn .btn-label {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .submit-btn .plane-icon {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .submit-btn:hover:not(.loading):not(.success) .plane-icon {
+            transform: translate(3px, -3px);
         }
 
         .submit-btn .btn-sending,
         .submit-btn .btn-sent {
-            position: absolute;
-            inset: 0;
-            justify-content: center;
+            opacity: 0;
+            transform: scale(0.5);
+            pointer-events: none;
+        }
+
+        /* ── Phase 1: Loading (morph into circle spinner) ─────────────── */
+        .submit-btn.loading {
+            width: 54px !important;
+            max-width: 54px !important;
+            padding: 0 !important;
+            border-radius: 50% !important;
+            cursor: wait;
+            box-shadow: 0 6px 22px rgba(121, 40, 202, 0.4);
+        }
+
+        .submit-btn.loading .btn-label {
+            opacity: 0;
+            transform: translateY(-15px) scale(0.6);
+            pointer-events: none;
+        }
+
+        .submit-btn.loading .btn-sending {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .btn-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: btnSpin 0.75s linear infinite;
+        }
+
+        @keyframes btnSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ── Phase 2: Success (emerald circle + animated checkmark) ───── */
+        .submit-btn.success {
+            width: 54px !important;
+            max-width: 54px !important;
+            padding: 0 !important;
+            border-radius: 50% !important;
+            background: #10b981 !important;
+            box-shadow: 0 10px 28px rgba(16, 185, 129, 0.55), 0 0 0 8px rgba(16, 185, 129, 0.15) !important;
+            animation: successPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0.85); }
+            50% { transform: scale(1.18); }
+            100% { transform: scale(1); }
+        }
+
+        .submit-btn.success .btn-label,
+        .submit-btn.success .btn-sending {
             opacity: 0;
             pointer-events: none;
         }
 
-        .submit-btn.sending .btn-label {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        .submit-btn.sending .btn-sending {
+        .submit-btn.success .btn-sent {
             opacity: 1;
+            transform: scale(1);
         }
 
-        .submit-btn.sent .btn-label {
-            opacity: 0;
+        .check-icon {
+            stroke-dasharray: 50;
+            stroke-dashoffset: 50;
+            animation: checkDraw 0.45s 0.1s ease forwards;
         }
 
-        .submit-btn.sent .btn-sending {
-            opacity: 0;
+        @keyframes checkDraw {
+            to { stroke-dashoffset: 0; }
         }
 
-        .submit-btn.sent .btn-sent {
-            opacity: 1;
+        /* ── Error Shake ─────────────────────────────────────────────── */
+        @keyframes buttonShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
         }
 
-        /* ── Spinner ──────────────────────────────────────────────── */
-        .spin-icon {
-            width: 18px;
-            height: 18px;
-            border: 2.5px solid rgba(255, 255, 255, 0.4);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .submit-btn.error {
+            animation: buttonShake 0.4s ease;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        /* ── Caption Below Button (Ready when you are -> Message sent) ─ */
+        .btn-status-caption {
+            margin-top: 14px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--clr-muted, #94a3b8);
+            text-align: center;
+            letter-spacing: 0.2px;
+            transition: all 0.35s ease;
         }
 
-        /* ── Paper-plane fly-out ─────────────────────────────────── */
-        .plane-wrapper {
-            position: relative;
-            width: 24px;
-            height: 24px;
-            overflow: hidden;
+        .btn-status-caption.sent {
+            color: #10b981;
+            font-weight: 600;
+            transform: scale(1.04);
         }
 
-        @keyframes planefly {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 1;
-            }
-
-            70% {
-                transform: translate(60px, -60px) rotate(45deg);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translate(80px, -80px) rotate(45deg);
-                opacity: 0;
-            }
+        /* ── Radial Burst Confetti Particles ─────────────────────────── */
+        .radial-confetti-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            will-change: transform, opacity;
         }
 
-        .submit-btn.sending .plane-icon {
-            animation: planefly 1s ease forwards;
-        }
-
-        /* ── Confetti burst ──────────────────────────────────────── */
+        /* ── Background celebratory confetti pieces ──────────────────── */
         .confetti-overlay {
             position: fixed;
             inset: 0;
@@ -115,15 +218,15 @@
 
         .confetti-piece {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 9px;
+            height: 9px;
             border-radius: 2px;
             opacity: 0;
         }
 
         @keyframes confettiFall {
             0% {
-                transform: translateY(-80px) rotate(0deg);
+                transform: translateY(-60px) rotate(0deg);
                 opacity: 1;
             }
 
@@ -444,36 +547,39 @@
                                 placeholder="Tell me about the opportunity or project..."></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
+                        <div class="submit-btn-wrapper">
+                            <button type="submit" class="submit-btn" id="submit-btn">
 
-                            <!-- Default label -->
-                            <span class="btn-label">
-                                <!-- Paper plane icon -->
-                                <svg class="plane-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <line x1="22" y1="2" x2="11" y2="13" />
-                                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                                </svg>
-                                Send Message
-                            </span>
+                                <!-- Default label: Text on left, paper plane on right -->
+                                <span class="btn-label">
+                                    Send message
+                                    <svg class="plane-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13" />
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                    </svg>
+                                </span>
 
-                            <!-- Sending state -->
-                            <span class="btn-sending">
-                                <span class="spin-icon"></span>
-                                Sending…
-                            </span>
+                                <!-- Phase 1: Loading spinner in circle -->
+                                <span class="btn-sending">
+                                    <span class="btn-spinner"></span>
+                                </span>
 
-                            <!-- Sent state -->
-                            <span class="btn-sent">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 6 9 17l-5-5" />
-                                </svg>
-                                Message Sent!
-                            </span>
+                                <!-- Phase 2: Success checkmark in emerald circle -->
+                                <span class="btn-sent">
+                                    <svg class="check-icon" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                        stroke="#ffffff" stroke-width="3" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                </span>
 
-                        </button>
+                            </button>
+
+                            <!-- Subtitle caption: Ready when you are -> Message sent -->
+                            <p class="btn-status-caption" id="btn-status-caption">Ready when you are</p>
+                        </div>
 
                         <!-- Success / Error feedback -->
                         <div id="form-success">
@@ -524,29 +630,79 @@
         const SERVICE_ID = "service_8cv0ku6";          // ← e.g. "service_abc123"
         const TEMPLATE_ID = "template_ldneovn";         // ← e.g. "template_xyz789"
 
-        /* ── Confetti burst ─────────────────────────────────────── */
-        function launchConfetti() {
-            const overlay = document.getElementById('confetti-overlay');
-            const colors = ['#00e5ff', '#8b5cf6', '#ec4899', '#34d399', '#fbbf24', '#f87171'];
-            const COUNT = 80;
+        /* ── Radial Burst + Falling Confetti (Reel style) ────────── */
+        function launchConfetti(originEl) {
+            // 1. Radial particle explosion outward from button center
+            if (originEl) {
+                const rect = originEl.getBoundingClientRect();
+                const originX = rect.left + rect.width / 2;
+                const originY = rect.top + rect.height / 2;
+                const colors = ['#00e5ff', '#8b5cf6', '#ec4899', '#10b981', '#fbbf24', '#f97316', '#3b82f6'];
+                const count = 48;
 
-            for (let i = 0; i < COUNT; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'confetti-piece';
-                piece.style.cssText = `
-                    left: ${Math.random() * 100}vw;
-                    top: ${-20 - Math.random() * 60}px;
-                    background: ${colors[Math.floor(Math.random() * colors.length)]};
-                    width: ${6 + Math.random() * 8}px;
-                    height: ${6 + Math.random() * 8}px;
-                    border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
-                    animation: confettiFall ${1.5 + Math.random() * 2}s ${Math.random() * 0.8}s ease-out forwards;
-                `;
-                overlay.appendChild(piece);
+                for (let i = 0; i < count; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'radial-confetti-particle';
+
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const size = Math.random() * 8 + 5;
+                    const angle = Math.random() * 2 * Math.PI;
+                    const distance = Math.random() * 120 + 50;
+                    const duration = Math.random() * 0.5 + 0.9;
+                    const destX = Math.cos(angle) * distance;
+                    const destY = Math.sin(angle) * distance + 25; // gravity pull
+                    const rotation = Math.random() * 720 - 360;
+
+                    particle.style.cssText = `
+                        left: ${originX}px;
+                        top: ${originY}px;
+                        width: ${size}px;
+                        height: ${size * (Math.random() > 0.5 ? 1 : 1.6)}px;
+                        background: ${color};
+                        border-radius: ${Math.random() > 0.6 ? '50%' : '2px'};
+                        transform: translate(-50%, -50%) translate(0px, 0px) rotate(0deg) scale(0.6);
+                        opacity: 1;
+                        transition: transform ${duration}s cubic-bezier(0.12, 0.8, 0.32, 1), opacity ${duration}s ease-out;
+                    `;
+
+                    document.body.appendChild(particle);
+
+                    requestAnimationFrame(() => {
+                        particle.style.transform = `translate(-50%, -50%) translate(${destX}px, ${destY}px) rotate(${rotation}deg) scale(1)`;
+                        setTimeout(() => {
+                            particle.style.opacity = '0';
+                        }, duration * 600);
+                    });
+
+                    setTimeout(() => {
+                        particle.remove();
+                    }, duration * 1000 + 100);
+                }
             }
 
-            // Clean up after animation
-            setTimeout(() => { overlay.innerHTML = ''; }, 4000);
+            // 2. Celebratory floating confetti
+            const overlay = document.getElementById('confetti-overlay');
+            if (overlay) {
+                const colors = ['#00e5ff', '#8b5cf6', '#ec4899', '#34d399', '#fbbf24', '#f87171'];
+                const COUNT = 60;
+
+                for (let i = 0; i < COUNT; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'confetti-piece';
+                    piece.style.cssText = `
+                        left: ${Math.random() * 100}vw;
+                        top: ${-20 - Math.random() * 60}px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        width: ${6 + Math.random() * 8}px;
+                        height: ${6 + Math.random() * 8}px;
+                        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                        animation: confettiFall ${1.5 + Math.random() * 2}s ${Math.random() * 0.8}s ease-out forwards;
+                    `;
+                    overlay.appendChild(piece);
+                }
+
+                setTimeout(() => { overlay.innerHTML = ''; }, 4000);
+            }
         }
 
         /* ── Form submit ────────────────────────────────────────── */
@@ -554,6 +710,7 @@
             e.preventDefault();
 
             const btn = document.getElementById('submit-btn');
+            const caption = document.getElementById('btn-status-caption');
             const successBox = document.getElementById('form-success');
             const errorBox = document.getElementById('form-error');
 
@@ -573,12 +730,16 @@
                 return;
             }
 
-            // Start sending animation
-            btn.classList.add('sending');
+            // Start sending animation (Phase 1: Morph into Circle Spinner)
+            btn.classList.remove('success', 'error');
+            btn.classList.add('loading');
             btn.disabled = true;
+            if (caption) {
+                caption.textContent = 'Sending message…';
+                caption.classList.remove('sent');
+            }
 
             // Build the template parameters
-            // These names must match the variables in your EmailJS template
             const templateParams = {
                 from_name: `${fname} ${lname}`,
                 from_email: email,
@@ -589,25 +750,44 @@
 
             emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
                 .then(() => {
-                    // Success state
-                    btn.classList.remove('sending');
-                    btn.classList.add('sent');
+                    // Phase 2: Success state (Confetti burst + Emerald circle checkmark)
+                    btn.classList.remove('loading');
+                    btn.classList.add('success');
+
+                    if (caption) {
+                        caption.textContent = 'Message sent';
+                        caption.classList.add('sent');
+                    }
 
                     successBox.style.display = 'block';
-                    launchConfetti();
+                    launchConfetti(btn);
 
                     // Reset form fields
                     document.getElementById('contact-form').reset();
 
-                    // After 5 s, allow re-sending
+                    // Phase 3: Smooth return to initial state after 5 seconds
                     setTimeout(() => {
-                        btn.classList.remove('sent');
+                        btn.classList.remove('success');
                         btn.disabled = false;
+                        if (caption) {
+                            caption.textContent = 'Ready when you are';
+                            caption.classList.remove('sent');
+                        }
                     }, 5000);
                 })
                 .catch((err) => {
-                    btn.classList.remove('sending');
+                    btn.classList.remove('loading');
+                    btn.classList.add('error');
                     btn.disabled = false;
+
+                    if (caption) {
+                        caption.textContent = 'Ready when you are';
+                        caption.classList.remove('sent');
+                    }
+
+                    setTimeout(() => {
+                        btn.classList.remove('error');
+                    }, 600);
 
                     errorBox.innerHTML = `❌ Failed to send — ${err.text || err.message || 'please try again or email me directly at <a href="mailto:iyyappan200509@gmail.com">iyyappan200509@gmail.com</a>'}.`;
                     errorBox.style.display = 'block';
