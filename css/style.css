@@ -1343,3 +1343,179 @@ body:not(.dark-theme) .hero::before {
 body:not(.dark-theme) .hero::after {
   background: radial-gradient(circle, rgba(var(--rgb-purple), 0.2), transparent 70%);
 }
+
+/* ============================================================
+   ANIMATED DOWNLOAD BUTTON MICRO-INTERACTION (Reel Style)
+   ============================================================ */
+.dl-btn-anim {
+  position: relative !important;
+  overflow: hidden !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  min-height: 48px !important;
+  padding: 12px 26px !important;
+  border-radius: 9999px !important;
+  text-decoration: none !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 8px 22px -4px rgba(0, 124, 240, 0.3), 0 4px 12px rgba(121, 40, 202, 0.25) !important;
+}
+
+.dl-btn-anim.btn-primary {
+  background: linear-gradient(135deg, #007cf0 0%, #7928ca 50%, #ff0080 100%) !important;
+  background-size: 200% 200% !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.dl-btn-anim.btn-outline {
+  background: rgba(15, 23, 42, 0.5) !important;
+  border: 1.5px solid rgba(0, 229, 255, 0.5) !important;
+  color: var(--clr-cyan, #00e5ff) !important;
+}
+
+.dl-btn-anim:hover:not(.is-downloading):not(.is-success) {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 28px -4px rgba(0, 229, 255, 0.45), 0 6px 18px rgba(121, 40, 202, 0.35) !important;
+}
+
+.dl-btn-anim:active:not(.is-downloading):not(.is-success) {
+  transform: scale(0.97) !important;
+}
+
+/* Micro-interaction: Hover arrow bounce */
+.dl-btn-anim .dl-arrow-icon {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.dl-btn-anim:hover:not(.is-downloading):not(.is-success) .dl-arrow-icon {
+  animation: dlArrowBounce 0.8s ease infinite;
+}
+
+@keyframes dlArrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3.5px); }
+}
+
+/* States container */
+.dl-btn-anim .dl-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dl-btn-anim .dl-state-default {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dl-btn-anim .dl-state-loading,
+.dl-btn-anim .dl-state-success {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+/* Progress Fill Bar inside the button */
+.dl-btn-anim .dl-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.4), rgba(121, 40, 202, 0.6), rgba(236, 72, 153, 0.5));
+  z-index: 1;
+  transition: width 0.15s ease-out;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* State: Downloading (Loading) */
+.dl-btn-anim.is-downloading {
+  cursor: wait !important;
+  box-shadow: 0 8px 24px rgba(0, 229, 255, 0.4) !important;
+}
+
+.dl-btn-anim.is-downloading .dl-progress-bar {
+  opacity: 1;
+}
+
+.dl-btn-anim.is-downloading .dl-state-default {
+  opacity: 0;
+  transform: translateY(-12px) scale(0.7);
+}
+
+.dl-btn-anim.is-downloading .dl-state-loading {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dl-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: dlSpin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes dlSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* State: Success (Emerald Green + Animated Checkmark) */
+.dl-btn-anim.is-success {
+  background: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 28px rgba(16, 185, 129, 0.55), 0 0 0 8px rgba(16, 185, 129, 0.15) !important;
+  animation: dlSuccessPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes dlSuccessPop {
+  0% { transform: scale(0.92); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.dl-btn-anim.is-success .dl-progress-bar {
+  opacity: 0;
+}
+
+.dl-btn-anim.is-success .dl-state-default,
+.dl-btn-anim.is-success .dl-state-loading {
+  opacity: 0;
+}
+
+.dl-btn-anim.is-success .dl-state-success {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dl-check-icon {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: dlCheckDraw 0.45s 0.1s ease forwards;
+  flex-shrink: 0;
+}
+
+@keyframes dlCheckDraw {
+  to { stroke-dashoffset: 0; }
+}
